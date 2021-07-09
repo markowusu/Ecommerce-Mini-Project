@@ -27,7 +27,7 @@
             </div>
 
             <div class="control">
-            <a href="#" class="button is-dark">
+            <a href="#" class="button is-dark" @click="addToCart">
             Add to Cart
             </a>
             </div>
@@ -50,15 +50,16 @@ export default {
         }
     },
     mounted(){
-        this.get_product_details()
+        this.get_product_details(),
+        this.addToCart()
     },
     methods: {
-        get_product_details(){
-
+        async get_product_details(){
+        this.$store.commit('stateIsLoading',true)
         const category_slug = this.$route.params.category_slug
         const product_slug  = this.$route.params.product_slug
 
-        axios.get(`api/v1/products/${category_slug}/${product_slug}`)
+        await axios.get(`api/v1/products/${category_slug}/${product_slug}`)
         .then(response => {
             this.product = response.data
             
@@ -66,7 +67,25 @@ export default {
         }).catch(error => {
             console.log(error)
         })
+            this.$store.commit('stateIsLoading', false)
+
+        
+       },
+
+         addToCart(){
+           if (isNaN(this.quantity)|| this.quantity < 1  ){
+               this.quantity = 1;
+           }
+
+           const item = {
+               product: this.product,
+               quantity: this.quantity
+           }
+          
+           this.$store.commit('addToCart', item)
        }
+
+     
     }
 }
 </script>

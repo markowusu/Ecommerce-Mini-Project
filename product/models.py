@@ -2,6 +2,14 @@ from django.db import models
 from PIL import Image
 from io import BytesIO
 from django.core.files import File
+from urllib.request import urlopen
+from tempfile import NamedTemporaryFile
+
+
+
+
+
+
 data = {'summer':1, 'men':2}
 class Category(models.Model):
 
@@ -9,7 +17,7 @@ class Category(models.Model):
     slug = models.SlugField(max_length = 255, unique = True)
     description = models.TextField()
     created_at = models.DateField(auto_now_add=True)
-    update_at = models.DateField(auto_now=False)
+    update_at = models.DateField(auto_now=True)
 
     class Meta:
         verbose_name = ("Category")
@@ -26,7 +34,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    slug = models.SlugField(max_length=255, unique=True,help_text='Unique value for product page URL, created from name.')
+    slug = models.SlugField(max_length=255,help_text='Unique value for product page URL, created from name.')
     brand = models.CharField(max_length=50)
     sku = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=9,decimal_places=2)
@@ -43,6 +51,8 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     categories = models.ForeignKey(Category, on_delete=models.CASCADE ,null= True) 
+    image_url = models.URLField( max_length=200,blank=True,null=True)
+    product_content = models.TextField(blank=True)
 
 
     class Meta:
@@ -89,4 +99,15 @@ class Product(models.Model):
         thumbnail = File(thumb_io,name=image.name)
 
         return thumbnail
+
+# This get the imageurl and then saves the image inthe local diretory before display from the local 
+# directory not the website. 
+# This code does the files saving automatically when the image url is added 
+    def save(self, *args, **kwargs):
+        if self.image_url and not self.image:
+            img_temp = NamedTemporaryFile(delete=True)
+            img_temp.write(urlopen(self.image_url).read())
+            img_temp.flush()
+            self.image.save(f"image_{self.pk}", File(img_temp))
+        super(Product, self).save(*args, **kwargs)    
 
