@@ -1,7 +1,7 @@
 <template>
   <div>
 
-<h2 class="has-text-weight-bold">{{ productItem.title }}
+<h2 class="has-text-weight-bold">{{ productItem.name }}
 <div  class="box">
   <figure class="image mb-4">
   <img :src="productItem.thumbnail_image"/>
@@ -15,7 +15,7 @@ Add to Cart
 </span>
 </h2>
 
-<p>{{ productItem.description }}</p>
+<!--<p>{{ productItem.description }}</p> -->
 <span class="has-text-primary has-text-weight-bold">
 <i class="fa fa-usd"></i> {{ productItem.price }}
 </span>

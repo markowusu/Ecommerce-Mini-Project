@@ -1,8 +1,11 @@
 <template>
   <div class="home">
    <span>Home</span>
- <div class="column is-3" v-for="product in latestproduct"
-   v-bind:key="product.id">
+  <div v-if="latestproduct">
+ <div class="column is-3" 
+ v-for="product in latestproduct"
+   v-bind:key="product.id"
+   >
    <!-- <div class="box">
    <figure class="image mb-4">
    <img :src="product.thumbnail_image" alt="thumbnail image">
@@ -23,6 +26,7 @@
   </div>
   
   
+  </div>
   </div>
 
 </template>
@@ -48,10 +52,12 @@ export default {
     document.title = 'Home | Confirm '
   },
   methods:{
-    getProductList(){
-      axios.get('api/v1/latest-product/')
+    async getProductList(){
+      await axios.get('api/v1/latest-product/')
       .then(response =>{
-        this.latestproduct = response.data
+   
+        this.latestproduct = response.data.results
+        // console.log(this.latestproduct)
       })
       .catch(error => {
         console.log(error)

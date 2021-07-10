@@ -1,21 +1,15 @@
 <template>
-<div class="search-term ">
-<div class="box column is-2 ">
+<div class="box column ">
 <figure class="image">
         <img :src="search.thumbnail_image" alt="">
 </figure>
 
 
-<h3 class="is-size-4"> 
+<h3 class="is-size-6"> 
 {{search.name}}</h3>
-<h3 class="is-size-4">
+<h3 class="is-size-6">
     {{search.price}}
 </h3>
-</div>
-
-<div>
-</div>
-
 </div>
 
     

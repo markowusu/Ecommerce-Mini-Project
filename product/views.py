@@ -2,10 +2,12 @@
 from django.http import Http404
 from rest_framework.views import APIView    
 from rest_framework import status 
+from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Product
 from .serializers import ProductSerializer
@@ -48,3 +50,17 @@ def search(request):
         return Response(serializer.data)
     else: 
         return Response({"products": []})
+
+
+#  pagination class 
+class ProductPagination(PageNumberPagination):
+    page_size = 6
+
+# viewsets- combines a set of related views together under one class 
+# It is also registered by the router to find the correct urlConf to use
+
+class ProductViewSet(viewsets.ModelViewSet):
+    pagination_class = ProductPagination 
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
+    

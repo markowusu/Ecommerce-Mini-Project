@@ -1,16 +1,25 @@
 <template>
-    <div class="page-search">
+    <div class="page-search columns">
 
-    <div class="column is-multiline ">
+    <div >
 
     <h2>Search:{{query}}</h2>
     </div>
 
-    <SearchTerm v-for="product in products"
+<div
+ v-for="product in products"
     v-bind:key="product.id"
-    v-bind:search="product" />
+   
+>
 
-    </div>
+  <SearchTerm
+    v-bind:search="product"
+   
+     />
+
+</div>
+  
+</div>
     
 </template>
 <script>
@@ -53,3 +62,4 @@ export default {
         
 }
 </script>
+
